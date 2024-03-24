@@ -1,6 +1,7 @@
 package org.example.delivery.utilities;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class XMLDataFetcher {
 // This only fetches data about Tallinn-Harku, Tartu-Tõravere and Pärnu right now
     public void fetchDataFromURL(String urlString) throws Exception {
         // Create an Url object from the urlString
-        URL url = new URL(urlString);
+        URL url = new URI(urlString).toURL();
         // Open a connection to the URL and get the InputStream
         InputStream is = url.openStream();
 
