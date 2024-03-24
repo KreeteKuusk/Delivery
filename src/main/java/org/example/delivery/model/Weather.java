@@ -16,7 +16,7 @@ public class Weather {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String stationName;
-    private String vmo;
+    private String wmo;
     private float temperature;
     private float windSpeed;
     private String phenomenon;
