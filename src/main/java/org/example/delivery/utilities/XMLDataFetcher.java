@@ -24,6 +24,12 @@ public class XMLDataFetcher {
     @Autowired
     private WeatherRepository weatherRepository;
 
+    /**
+     * Method for fetching xml type data from url
+     *
+     * @param urlString The url we want to read data from
+     * @throws Exception
+     */
     public void fetchDataFromURL(String urlString) throws Exception {
         // Create an Url object from the urlString
         URL url = new URI(urlString).toURL();
@@ -82,6 +88,16 @@ public class XMLDataFetcher {
         is.close();
     }
 
+    /**
+     * Method for inserting info to database
+     *
+     * @param name           name of the station
+     * @param timestamp      timestamp of data
+     * @param wmo            wmo code of the station
+     * @param airTemperature air temperature
+     * @param windSpeed      wind speed
+     * @param phenomenon     weather phenomenon
+     */
     public void saveDataToDatabase(String name, String timestamp, String wmo, String airTemperature, String windSpeed, String phenomenon) {
         Weather weather = new Weather();
         weather.setStationName(name);
