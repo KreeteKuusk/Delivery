@@ -11,6 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import org.example.delivery.model.Weather;
 import org.example.delivery.repository.WeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -18,8 +20,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 @Service
-public class XMLDataFetcher {
-// This only fetches data about Tallinn-Harku, Tartu-Tõravere and Pärnu right now
+public class XMLDataFetcher { // This only fetches data about Tallinn-Harku, Tartu-Tõravere and Pärnu right now
+
+    @Value("${weather.fetch.url}") // Reads the url from the application.properties
+    private String urlString;
 
     @Autowired
     private WeatherRepository weatherRepository;
@@ -27,10 +31,10 @@ public class XMLDataFetcher {
     /**
      * Method for fetching xml type data from url
      *
-     * @param urlString The url we want to read data from
      * @throws Exception If an error occurs during fetching or parsing
      */
-    public void fetchDataFromURL(String urlString) throws Exception {
+    @Scheduled(cron = "${weather.fetch.cron}") // Reads the cron expression from the application.properties
+    public void fetchDataFromURL() throws Exception {
         // Create an Url object from the urlString
         URL url = new URI(urlString).toURL();
         // Open a connection to the URL and get the InputStream
@@ -44,11 +48,12 @@ public class XMLDataFetcher {
         // Normalize text representation to make it more processable
         doc.getDocumentElement().normalize();
 
-        // Get the root element (Observation)
+        // Get the root element ("Observation" in our case)
         Element root = doc.getDocumentElement();
 
         // Get a NodeList of all "station" elements
         NodeList stationList = root.getElementsByTagName("station");
+
         // A list of all the stations we want data from
         ArrayList<String> wantedStations = new ArrayList<>(Arrays.asList("Tallinn-Harku", "Pärnu", "Tartu-Tõravere"));
 
@@ -73,13 +78,6 @@ public class XMLDataFetcher {
                     String phenomenon = stationElement.getElementsByTagName("phenomenon").item(0).getTextContent();
 
                     saveDataToDatabase(name, timestamp, wmo, airTemperature, windSpeed, phenomenon);
-                    System.out.println("Timestamp: " + timestamp);
-                    System.out.println("Station Name: " + name);
-                    System.out.println("WMO: " + wmo);
-                    System.out.println("Air Temperature: " + airTemperature);
-                    System.out.println("Wind Speed: " + windSpeed);
-                    System.out.println("Phenomenon: " + phenomenon);
-                    System.out.println();
                 }
             }
         }
