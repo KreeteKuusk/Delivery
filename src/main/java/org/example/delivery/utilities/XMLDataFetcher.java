@@ -8,13 +8,22 @@ import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
+import org.example.delivery.model.Weather;
+import org.example.delivery.repository.WeatherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+@Service
 public class XMLDataFetcher {
 // This only fetches data about Tallinn-Harku, Tartu-Tõravere and Pärnu right now
+
+    @Autowired
+    private WeatherRepository weatherRepository;
+
     public void fetchDataFromURL(String urlString) throws Exception {
         // Create an Url object from the urlString
         URL url = new URI(urlString).toURL();
@@ -57,6 +66,7 @@ public class XMLDataFetcher {
                     String windSpeed = stationElement.getElementsByTagName("windspeed").item(0).getTextContent();
                     String phenomenon = stationElement.getElementsByTagName("phenomenon").item(0).getTextContent();
 
+                    saveDataToDatabase(name, timestamp, wmo, airTemperature, windSpeed, phenomenon);
                     System.out.println("Timestamp: " + timestamp);
                     System.out.println("Station Name: " + name);
                     System.out.println("WMO: " + wmo);
@@ -72,6 +82,14 @@ public class XMLDataFetcher {
         is.close();
     }
 
-    public void saveDataToDatabase(){
+    public void saveDataToDatabase(String name, String timestamp, String wmo, String airTemperature, String windSpeed, String phenomenon) {
+        Weather weather = new Weather();
+        weather.setStationName(name);
+        weather.setTimestamp(timestamp);
+        weather.setWmo(wmo);
+        weather.setTemperature(Float.parseFloat(airTemperature));
+        weather.setWindSpeed(Float.parseFloat(windSpeed));
+        weather.setPhenomenon(phenomenon);
+        weatherRepository.save(weather);
     }
 }
