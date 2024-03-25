@@ -28,7 +28,7 @@ public class XMLDataFetcher {
      * Method for fetching xml type data from url
      *
      * @param urlString The url we want to read data from
-     * @throws Exception
+     * @throws Exception If an error occurs during fetching or parsing
      */
     public void fetchDataFromURL(String urlString) throws Exception {
         // Create an Url object from the urlString
