@@ -63,11 +63,8 @@ public class DeliveryFeeCalculator {
         else if (city.equals("pärnu")) stationName = "Pärnu";
         else throw new IllegalArgumentException("Station name not provided for this city");
 
-        // Find the newest data from the list
         // If the data is present then assign it to weather variable
-        Weather weather = weatherRepository.findTopByCityOrderByTimestampDesc(stationName)
-                .stream()
-                .findFirst()
+        Weather weather = weatherRepository.findTopCityOrderByTimestampDesc(stationName)
                 .orElseThrow(() -> new IllegalArgumentException("No weather data available for city: " + cityName));
 
         if (vehicle.equals("bike") || vehicle.equals("scooter")) {
@@ -94,11 +91,4 @@ public class DeliveryFeeCalculator {
         return extrafee;
     }
 
-   /* private Weather getLatestWeatherData(String city) {
-        String queryStr = "SELECT w FROM Weather w WHERE w.city = :city ORDER BY w.id DESC";
-        TypedQuery<Weather> query = entityManager.createQuery(queryStr, Weather.class);
-        query.setParameter("city", city);
-        query.setMaxResults(1);
-        return query.getSingleResult();
-    }*/
 }

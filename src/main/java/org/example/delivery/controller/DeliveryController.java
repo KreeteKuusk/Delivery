@@ -1,6 +1,5 @@
 package org.example.delivery.controller;
 
-import org.example.delivery.repository.WeatherRepository;
 import org.example.delivery.utilities.DeliveryFeeCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +15,7 @@ public class DeliveryController {
 
     @GetMapping("/calculateDeliveryFee") // GET request example -> /calculateDeliveryFee?city=Tallinn&vehicleType=car
     public ResponseEntity<Double> calculateDeliveryFee(@RequestParam String cityName, @RequestParam String vehicleType) {
-        // total delivery fee = regional base fee +  weather conditions extra fee
-        double totalFee = 0;
+        double totalFee = 0; // total delivery fee = regional base fee +  weather conditions extra fee
         try {
             totalFee += deliveryFeeCalculator.calculateRegionalBaseFee(cityName, vehicleType); // Calculating regional base fee
             totalFee += deliveryFeeCalculator.calculateExtraFee(cityName, vehicleType); // Calculating weather conditions extra fee
