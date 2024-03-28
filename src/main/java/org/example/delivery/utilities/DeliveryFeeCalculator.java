@@ -50,8 +50,6 @@ public class DeliveryFeeCalculator {
     }
 
     public double calculateExtraFee(String cityName, String vehicleType) {
-        double extrafee = 0;
-
         // Converting to lowercase
         String vehicle = vehicleType.toLowerCase();
         String city = cityName.toLowerCase();
@@ -67,28 +65,41 @@ public class DeliveryFeeCalculator {
         Weather weather = weatherRepository.findTopCityOrderByTimestampDesc(stationName)
                 .orElseThrow(() -> new IllegalArgumentException("No weather data available for city: " + cityName));
 
-        if (vehicle.equals("bike") || vehicle.equals("scooter")) {
-            // Air temperature
-            float temp = weather.getTemperature();
-            if (-10 <= temp && temp <= 0) extrafee += 0.5;
-            else if (temp < -10) extrafee += 1;
+        // Air temperature extra fee
+        double atef = calculateAirTemperatureExtraFee(weather.getTemperature(), vehicle);
+        // Weather phenomenon extra fee
+        double wpef = calculateWeatherPhenomenonExtraFee(weather.getPhenomenon(), vehicle);
+        // Wind speed extra fee
+        double wsef = calculateWindSpeedExtraFee(weather.getWindSpeed(), vehicle);
 
-            // Weather phenomenon
-            String wp = weather.getPhenomenon();
-            if (wp.contains("snow") || wp.contains("fleet")) extrafee += 1;
-            else if (wp.contains("rain")) extrafee += 0.5;
+        return atef + wpef + wsef;
+    }
+
+    private double calculateWindSpeedExtraFee(double wspeed, String vehicle) {
+        if (vehicle.equals("bike")) {
+            if (10 <= wspeed && wspeed <= 20) return 0.5;
+            else if (wspeed > 20) throw new IllegalArgumentException("Usage of selected vehicle type is forbidden");
+        }
+        return 0;
+    }
+
+    private double calculateWeatherPhenomenonExtraFee(String wp, String vehicle) {
+        if (vehicle.equals("bike") || vehicle.equals("scooter")) {
+            if (wp.contains("snow") || wp.contains("fleet")) return 1;
+            else if (wp.contains("rain")) return 0.5;
             else if (wp.equals("glaze") || wp.equals("hail") || wp.equals("thunder")) {
                 throw new IllegalArgumentException("Usage of selected vehicle type is forbidden");
             }
         }
-        // Wind speed
-        if (vehicle.equals("bike")) {
-            float wspeed = weather.getWindSpeed();
-            if (10 <= wspeed && wspeed <= 20) extrafee += 0.5;
-            else if (wspeed > 20) throw new IllegalArgumentException("Usage of selected vehicle type is forbidden");
-        }
+        return 0;
+    }
 
-        return extrafee;
+    private double calculateAirTemperatureExtraFee(double temp, String vehicle) {
+        if (vehicle.equals("bike") || vehicle.equals("scooter")) {
+            if (-10 <= temp && temp <= 0) return 0.5;
+            else if (temp < -10) return 1;
+        }
+        return 0;
     }
 
 }
