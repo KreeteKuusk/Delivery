@@ -15,11 +15,11 @@ public class DeliveryController {
 
     @GetMapping("/calculateDeliveryFee") // GET request example -> /calculateDeliveryFee?city=Tallinn&vehicleType=car
     public ResponseEntity<Double> calculateDeliveryFee(@RequestParam String cityName, @RequestParam String vehicleType) {
-        double totalFee = 0; // total delivery fee = regional base fee +  weather conditions extra fee
         try {
-            totalFee += deliveryFeeCalculator.calculateRegionalBaseFee(cityName, vehicleType); // Calculating regional base fee
-            totalFee += deliveryFeeCalculator.calculateExtraFee(cityName, vehicleType); // Calculating weather conditions extra fee
-            return new ResponseEntity<>(totalFee, HttpStatus.OK);
+            // Total Delivery Fee = Regional Base fee + Weather Conditions Extra Fee
+            double rbf = deliveryFeeCalculator.calculateRegionalBaseFee(cityName, vehicleType); // Calculating regional base fee
+            double ef = deliveryFeeCalculator.calculateExtraFee(cityName, vehicleType); // Calculating weather conditions extra fee
+            return new ResponseEntity<>(rbf + ef, HttpStatus.OK);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
