@@ -43,7 +43,7 @@ public class DeliveryFeeCalculator {
             };
 
         } else {
-            throw new IllegalArgumentException("Invalid city type");
+            throw new IllegalArgumentException("Invalid city name");
         }
 
         return rbf;
