@@ -85,6 +85,7 @@ public class DeliveryFeeCalculator {
     }
 
     private double calculateWeatherPhenomenonExtraFee(String wp, String vehicle) {
+        if (wp == null) return 0; // If there is no weather phenomenon, then there's no fee
         if (vehicle.equals("bike") || vehicle.equals("scooter")) {
             if (wp.contains("snow") || wp.contains("fleet")) return 1;
             else if (wp.contains("rain")) return 0.5;
