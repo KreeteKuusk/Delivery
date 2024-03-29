@@ -54,15 +54,9 @@ public class DeliveryFeeCalculator {
         String vehicle = vehicleType.toLowerCase();
         String city = cityName.toLowerCase();
 
-        // Getting the latest weather data
-        String stationName;
-        if (city.equals("tallinn")) stationName = "Tallinn-Harku";
-        else if (city.equals("tartu")) stationName = "Tartu-Tõravere";
-        else if (city.equals("pärnu")) stationName = "Pärnu";
-        else throw new IllegalArgumentException("Station name not provided for this city");
-
-        // If the data is present then assign it to weather variable
-        Weather weather = weatherRepository.findTopCityOrderByTimestampDesc(stationName)
+        // Getting the latest weather data. If the data is present then assign it to weather variable
+        // We also need the stationName, not the cityname to fetch data
+        Weather weather = weatherRepository.findTopCityOrderByTimestampDesc(getStationNameFromCityName(city))
                 .orElseThrow(() -> new IllegalArgumentException("No weather data available for city: " + cityName));
 
         // Air temperature extra fee
@@ -73,6 +67,13 @@ public class DeliveryFeeCalculator {
         double wsef = calculateWindSpeedExtraFee(weather.getWindSpeed(), vehicle);
 
         return atef + wpef + wsef;
+    }
+
+    private String getStationNameFromCityName(String city) {
+        if (city.equals("tallinn")) return  "Tallinn-Harku";
+        else if (city.equals("tartu")) return  "Tartu-Tõravere";
+        else if (city.equals("pärnu")) return  "Pärnu";
+        else throw new IllegalArgumentException("Station name not provided for this city");
     }
 
     private double calculateWindSpeedExtraFee(double wspeed, String vehicle) {
