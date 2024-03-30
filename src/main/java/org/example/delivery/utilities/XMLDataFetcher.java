@@ -50,7 +50,7 @@ public class XMLDataFetcher { // This only fetches data about Tallinn-Harku, Tar
         // Normalize text representation to make it more processable
         doc.getDocumentElement().normalize();
 
-        // Get the root element ("Observation" in our case)
+        // Get the root element ("Observation" in this case)
         Element root = doc.getDocumentElement();
 
         // Get a NodeList of all "station" elements
