@@ -4,6 +4,10 @@ import org.example.delivery.model.Weather;
 import org.example.delivery.repository.WeatherRepository;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class provides methods for calculating the total delivery fee
+ */
+
 @Service
 public class DeliveryFeeCalculator {
 

@@ -18,6 +18,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+/**
+ * This class provides methods for fetching data from url and saving it to database
+ */
+
 @Service
 public class XMLDataFetcher { // This only fetches data about Tallinn-Harku, Tartu-Tõravere and Pärnu right now
 
@@ -31,7 +35,7 @@ public class XMLDataFetcher { // This only fetches data about Tallinn-Harku, Tar
     }
 
     /**
-     * Method for fetching xml type data from url
+     * Method for fetching xml type data from url and saving it to database
      *
      * @throws Exception If an error occurs during fetching or parsing
      */
