@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface WeatherRepository extends JpaRepository<Weather, Integer> {
 
-    // SQL query for finding the latest weather data
+    // SQL query for finding the latest weather data for a certain city
     @Query(value = "SELECT w FROM Weather w WHERE w.stationName = :city ORDER BY w.timestamp DESC LIMIT 1")
     Optional<Weather> findTopCityOrderByTimestampDesc(@Param("city") String city);
 }
