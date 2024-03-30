@@ -2,14 +2,16 @@ package org.example.delivery.utilities;
 
 import org.example.delivery.model.Weather;
 import org.example.delivery.repository.WeatherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeliveryFeeCalculator {
 
-    @Autowired
-    private WeatherRepository weatherRepository;
+    private final WeatherRepository weatherRepository;
+
+    public DeliveryFeeCalculator(WeatherRepository weatherRepository) {
+        this.weatherRepository = weatherRepository;
+    }
 
     /**
      * Method for calculating the total delivery fee

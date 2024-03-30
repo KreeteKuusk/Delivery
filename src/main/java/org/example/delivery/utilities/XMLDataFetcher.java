@@ -10,7 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 
 import org.example.delivery.model.Weather;
 import org.example.delivery.repository.WeatherRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,11 @@ public class XMLDataFetcher { // This only fetches data about Tallinn-Harku, Tar
     @Value("${weather.fetch.url}") // Reads the url from the application.properties
     private String urlString;
 
-    @Autowired
-    private WeatherRepository weatherRepository;
+    private final WeatherRepository weatherRepository;
+
+    public XMLDataFetcher(WeatherRepository weatherRepository) {
+        this.weatherRepository = weatherRepository;
+    }
 
     /**
      * Method for fetching xml type data from url

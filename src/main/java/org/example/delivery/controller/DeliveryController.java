@@ -1,7 +1,6 @@
 package org.example.delivery.controller;
 
 import org.example.delivery.utilities.DeliveryFeeCalculator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class DeliveryController {
 
-    @Autowired
-    private DeliveryFeeCalculator deliveryFeeCalculator;
+    private final DeliveryFeeCalculator deliveryFeeCalculator;
+
+    public DeliveryController(DeliveryFeeCalculator deliveryFeeCalculator) {
+        this.deliveryFeeCalculator = deliveryFeeCalculator;
+    }
 
     @GetMapping("/calculateDeliveryFee") // GET request example -> /calculateDeliveryFee?city=Tallinn&vehicleType=car
     public ResponseEntity<Double> calculateDeliveryFee(@RequestParam String cityName, @RequestParam String vehicleType) {
