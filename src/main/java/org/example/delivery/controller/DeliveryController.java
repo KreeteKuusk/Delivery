@@ -15,11 +15,9 @@ public class DeliveryController {
 
     @GetMapping("/calculateDeliveryFee") // GET request example -> /calculateDeliveryFee?city=Tallinn&vehicleType=car
     public ResponseEntity<Double> calculateDeliveryFee(@RequestParam String cityName, @RequestParam String vehicleType) {
-
-            // Total Delivery Fee = Regional Base fee + Weather Conditions Extra Fee
-            double rbf = deliveryFeeCalculator.calculateRegionalBaseFee(cityName, vehicleType); // Calculating regional base fee
-            double ef = deliveryFeeCalculator.calculateExtraFee(cityName, vehicleType); // Calculating weather conditions extra fee
-            return new ResponseEntity<>(rbf + ef, HttpStatus.OK);
+        // Calculating the total delivery fee
+        double totalDeliveryFee = deliveryFeeCalculator.calculateTotalDeliveryFee(cityName, vehicleType);
+        return new ResponseEntity<>(totalDeliveryFee, HttpStatus.OK);
 
 
     }

@@ -11,7 +11,14 @@ public class DeliveryFeeCalculator {
     @Autowired
     private WeatherRepository weatherRepository;
 
-    public double calculateRegionalBaseFee(String cityName, String vehicleType) {
+    public double calculateTotalDeliveryFee(String cityName, String vehicleType){
+        // Total Delivery Fee = Regional Base fee + Weather Conditions Extra Fee
+        double rbf = calculateRegionalBaseFee(cityName, vehicleType); // Calculating regional base fee
+        double ef = calculateExtraFee(cityName, vehicleType); // Calculating weather conditions extra fee
+        return rbf + ef;
+    }
+
+    private double calculateRegionalBaseFee(String cityName, String vehicleType) {
         // Converting to lowercase
         String city = cityName.toLowerCase();
         String vehicle = vehicleType.toLowerCase();
@@ -49,7 +56,7 @@ public class DeliveryFeeCalculator {
         return rbf;
     }
 
-    public double calculateExtraFee(String cityName, String vehicleType) {
+    private double calculateExtraFee(String cityName, String vehicleType) {
         // Converting to lowercase
         String vehicle = vehicleType.toLowerCase();
         String city = cityName.toLowerCase();
